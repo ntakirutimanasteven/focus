@@ -3,83 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus Dashboard</title>
-    <!-- Essential Serif Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Editorial Archive</title>
+    <!-- Essential Serif & Clean Sans Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Header Taskbar -->
-    <nav class="taskbar">
-        <div class="status-left">MODE: FOCUS</div>
-        <div class="center-logo">THE ARCHIVE</div>
-        <div id="live-clock" class="status-right">00:00</div>
-    </nav>
+    <!-- FEATURE: Header Taskbar -->
+    <header class="taskbar">
+        <div class="nav-item">SESSIONS: <span id="count">0</span></div>
+        <div class="nav-logo">THE ARCHIVE</div>
+        <div id="live-clock" class="nav-item">00:00:00</div>
+    </header>
 
-    <div class="dashboard">
-        <div class="focus-window">
-            <h1 id="timer">25:00</h1>
-            <p class="quote">"Deep work only."</p>
-            
-            <div class="timer-actions">
-                <button onclick="startTimer()" id="playBtn">START</button>
-                <button onclick="pauseTimer()">PAUSE</button>
-                <button onclick="resetTimer()">RESET</button>
-            </div>
+    <main class="split-layout">
+        <!-- FEATURE: Background Image (image.png) -->
+        <div class="left-panel">
+            <div class="fixed-image"></div>
         </div>
-    </div>
 
-    <!-- Bottom Sound Bar -->
-    <div class="sound-bar">
-        <span>AMBIENT SOUNDS:</span>
-        <button id="rainBtn" onclick="toggleSound('rain')">RAIN</button>
-        <button id="cafeBtn" onclick="toggleSound('cafe')">CAFE</button>
-    </div>
+        <div class="right-panel">
+            <section class="intro">
+                <h1 id="main-title">Focusing.</h1>
+                <!-- FEATURE: Goal Input -->
+                <input type="text" id="goalInput" placeholder="What are you working on?" oninput="updateGoal()">
+                <p class="quote">"Simplicity is the ultimate sophistication."</p>
+            </section>
+
+            <section class="timer-zone">
+                <div class="timer-display" id="timer">25:00</div>
+                <div class="actions">
+                    <button onclick="startTimer()">START</button>
+                    <button onclick="pauseTimer()">PAUSE</button>
+                    <button class="finish-btn" onclick="finishSession()">FINISH</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- FEATURE: Footer Soundbar -->
+    <footer class="soundbar">
+        <div class="sound-controls">
+            <span>AMBIENT:</span>
+            <button id="btn-rain" onclick="toggleAudio('rain')">Rain</button>
+            <button id="btn-cafe" onclick="toggleAudio('cafe')">Cafe</button>
+        </div>
+    </footer>
 
     <!-- Audio Elements -->
-    <audio id="snd-rain" loop src="https://www.soundjay.com/nature/sounds/rain-07.mp3"></audio>
-    <audio id="snd-cafe" loop src="https://www.soundjay.com/ambient/sounds/boarding-area-1.mp3"></audio>
+    <audio id="audio-rain" loop src="https://www.soundjay.com/nature/sounds/rain-07.mp3"></audio>
+    <audio id="audio-cafe" loop src="https://www.soundjay.com/ambient/sounds/boarding-area-1.mp3"></audio>
 
     <script>
-        // 1. Live Clock
-        function updateClock() {
-            let now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
-        setInterval(updateClock, 1000); updateClock();
+        // 1. Clock Logic
+        const clock = document.getElementById('live-clock');
+        setInterval(() => { clock.innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        // 2. Timer Logic
-        let secondsLeft = 1500;
-        let countdown = null;
-
-        function updateTimerText() {
-            let m = Math.floor(secondsLeft / 60);
-            let s = secondsLeft % 60;
-            document.getElementById('timer').innerText = m + ":" + (s < 10 ? '0' + s : s);
+        // 2. Goal Update Logic
+        function updateGoal() {
+            const input = document.getElementById('goalInput').value;
+            document.getElementById('main-title').innerText = input || "Focusing.";
         }
 
+        // 3. Timer & Session Logic
+        let time = 1500; let run = null; let sessions = 0;
         function startTimer() {
-            if (countdown) return;
-            countdown = setInterval(() => {
-                secondsLeft--;
-                updateTimerText();
-                if (secondsLeft <= 0) { clearInterval(countdown); alert("Break time!"); }
+            if (run) return;
+            run = setInterval(() => {
+                time--;
+                let m = Math.floor(time/60); let s = time%60;
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
             }, 1000);
         }
+        function pauseTimer() { clearInterval(run); run = null; }
+        function finishSession() {
+            sessions++;
+            document.getElementById('count').innerText = sessions;
+            pauseTimer(); time = 1500; document.getElementById('timer').innerText = "25:00";
+            alert("Session archived.");
+        }
 
-        function pauseTimer() { clearInterval(countdown); countdown = null; }
-        function resetTimer() { pauseTimer(); secondsLeft = 1500; updateTimerText(); }
-
-        // 3. Sound Toggles
-        function toggleSound(type) {
-            let track = document.getElementById('snd-' + type);
-            let btn = document.getElementById(type + 'Btn');
-            if (track.paused) {
-                track.play(); btn.classList.add('active');
-            } else {
-                track.pause(); btn.classList.remove('active');
-            }
+        // 4. Audio Mixer Logic
+        function toggleAudio(type) {
+            const track = document.getElementById('audio-' + type);
+            const btn = document.getElementById('btn-' + type);
+            if (track.paused) { track.play(); btn.classList.add('active'); }
+            else { track.pause(); btn.classList.remove('active'); }
         }
     </script>
 </body>
