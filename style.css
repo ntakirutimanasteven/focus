@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    /* Uses your image.png as background */
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('image.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Inter', sans-serif;
+    color: rgba(62, 63, 60, 0.438);
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* TOP TASKBAR */
+.taskbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: rgba(0, 255, 255, 0.438);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+.center-logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* MAIN DASHBOARD */
+.dashboard {
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.focus-window {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.507);
+    color: #2e2828;
+    padding: 60px 80px;
+    border-radius: 40px; /* Essential Square Look */
+    box-shadow: 0 40px 100px rgba(255, 103, 103, 0.3);
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -5px;
+}
+
+.quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: #000000;
+    margin-bottom: 40px;
+    font-size: 1.2rem;
+}
+
+/* BUTTONS */
+.timer-actions button {
+    background: none;
+    border: 1px solid #361b1b;
+    padding: 12px 25px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.timer-actions button:hover {
+    border-color: #222;
+    background: #222;
+    color: white;
+}
+
+/* BOTTOM SOUND BAR */
+.sound-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    padding: 20px;
+    color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-weight: bold;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+.sound-bar button {
+    background: #181414;
+    border: 1px solid #eee;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.sound-bar button.active {
+    background: #222;
+    color: white;
+}
